@@ -1,0 +1,42 @@
+<html xmlns:th="http://www.thymeleaf.org"> 
+<head>
+    <style>
+        img{
+            width:200px;
+            height:auto;
+        }
+
+        table tr td{
+            border:1px solid black;
+        }
+
+    </style>
+
+</head>
+
+<h2>上映中の作品</h2>
+<table>
+    <tbody>
+        <tr>
+            <th>ポスター</th>
+            <th>タイトル</th>
+            <th>上映館</th>
+            <th>予約ページ</th>    
+        </tr>
+        <tr th:each="onAir : ${onAirList}">
+            <td th:if="${onAir.moCode == 2}">
+                <img src="https://eiga.k-img.com/images/movie/100829/photo/f3212c072f6e9871/320.jpg?1717470463"/>
+            </td>
+            <td th:if="${onAir.moCode == 1}">
+                <img src="https://lumiere-a.akamaihd.net/v1/images/catalog_dp3jp_honposter_yorisoi_daihit_aa7c11ac.jpeg?region=0,0,540,810"/>
+            </td>
+            <td th:utext="${onAir.moName}"></td>
+            <td th:utext="${onAir.scName}"></td>
+            <td><a th:href="|showSeat?onCode=${onAir.onCode}&scCode=${onAir.scCode}|">予約はこちら</a></td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+</html>

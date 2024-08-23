@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.seat_reserve.infrastructure.movie.MovieMapper">
+
+  <select id="findAll" resultType="com.example.seat_reserve.domain.movie.model.Movie">
+    SELECT * FROM mst_movie
+  </select>
+
+    <select id="findAllOnAir" resultType="com.example.seat_reserve.domain.movie.model.OnAir">
+    SELECT 
+        air.MO_CODE
+        ,air.ON_CODE
+        ,air.SC_CODE
+        ,mov.MO_NAME
+        ,scr.SC_NAME
+    FROM
+        mst_on_air air
+    INNER JOIN
+        mst_movie mov
+    ON
+        air.MO_CODE = mov.MO_CODE
+    INNER JOIN
+        mst_screen scr
+    ON
+        air.SC_CODE = scr.SC_CODE      
+  </select>
+
+<select id="findSelectedScreenSeat" resultType="com.example.seat_reserve.domain.movie.model.Seat">
+    SELECT 
+        *
+    FROM
+        mst_seat
+    <where>
+        AND SC_CODE = #{scCode}
+    </where>
+    ORDER BY SEAT_DIV_ROM, SEAT_DIV_NUM
+  </select>
+</mapper>

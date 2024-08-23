@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.seat_reserve.infrastructure.reserve.ReserveMapper">
+
+    <select id="findReservedSeats" resultType="com.example.seat_reserve.domain.reserve.model.Reserve">
+    SELECT 
+        *
+    FROM
+        mov_reserve_info
+    <where>
+        AND ON_CODE = #{onCode}
+        <if test="seats != null and seats.size() > 0">
+        AND SEAT_NUM IN 
+        <foreach item="seat" collection="seats" open="(" separator="," close=")">
+            #{seat}
+        </foreach>
+        </if>
+    </where>
+    </select>
+
+<insert id="insertReservation" useGeneratedKeys="true" keyProperty="reNo" parameterType="com.example.seat_reserve.domain.reserve.model.Reserve">
+    INSERT INTO mov_reserve_info
+      (ON_CODE,SEAT_NUM,DELETE_FLG)
+    VALUES
+      (#{onCode}, #{seatNum}, #{deleteFlg}) 
+</insert>
+
+
+</mapper>

@@ -1,0 +1,19 @@
+<html xmlns:th="http://www.thymeleaf.org"> 
+
+<form name="seatForm" method="post" th:object="${seatForm}" th:action="@{/reserve/regist}">
+
+    <div>
+        <h2>選択された席</h2>
+        <ul>
+            <li th:each="seat : ${selectedSeats.seats}">
+                <p th:text="${seat}">座席番号</p>
+            </li>
+        </ul>
+    </div>
+    <div id="button-area">
+        <input type="submit" value="予約する">
+    </div>
+</form>
+
+
+</html>

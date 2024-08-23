@@ -1,0 +1,85 @@
+<html xmlns:th="http://www.thymeleaf.org"> 
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
+    <script>
+    $(document).ready(function() {
+        $('.seat').change(function() {
+            if ($(this).is(':checked')) {
+            let seatId = $(this).val();
+        $.ajax({
+            url: '/rssystem/ajax/checkSeat',  
+            type: 'POST',           
+            contentType: 'application/json', 
+            data:JSON.stringify( {
+                onCode: $("#onCode").val(),
+                seat: $(this).val()
+            }),
+            success: function(response) {
+                if (response.success) {
+                    console.log('Success: The operation was successful.');
+                } else {
+                    $("#message").text("既に予約された席です。再度選択してください。")
+                    $("#"+seatId).prop("checked", false);
+                    $("#"+seatId).prop("disabled",true);
+                    console.log('Failure: The operation failed.');
+                }
+            },
+            error: function(xhr, status, error) {
+                
+                console.log('Error: An error occurred - ' + error);
+            }
+        });
+    }
+});
+});
+
+    </script>
+
+            
+    <style>
+
+    table tbody tr td {
+        border:1px solid black;
+    }
+
+    input[disabled]{
+        color: #333;
+    }
+
+
+    </style>
+</head>
+
+<h2>座席表</h2>
+
+<form name="seatForm" method="post" th:object="${seatForm}" th:action="@{/reserve/confirm}">
+
+<p th:if="#{string.isEmpty(message)}" th:text="${message}" id="message">メッセージ</p>
+
+<table>
+    <tbody>
+        <tr th:each="seatList : ${seatMap}">
+            <td th:each="seat : ${seatList.value}">
+                <span th:text="${seat.seatNum}"></span> 
+                <input type="checkbox" th:id="${seat.seatNum}" class="seat" name="seats" th:value="${seat.seatNum}" th:disabled="${!seat.selected}"/>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<input type="hidden" id="onCode" th:value="${onCode}"/>
+<br><br>
+<div id="button-area">
+    <input type="submit" value="予約する">
+</div>
+
+
+
+
+
+
+
+
+</form>
+</html>
